@@ -1,6 +1,7 @@
-import React, { useState, ChangeEvent, useRef } from "react";
+import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import axios from "axios";
 import { useVoiceEntries } from "../context/VoiceEntriesContext";
+import { useRouter } from "next/navigation";
 
 interface AudioUploaderProps {
   clerkUserId: string | null;
@@ -26,6 +27,13 @@ const AudioUploader: React.FC<AudioUploaderProps> = ({ clerkUserId }) => {
   const { setVoiceEntries } = useVoiceEntries();
 
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (error === "You must pay to add more entries") {
+      router.push("/payment");
+    }
+  }, [error]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
@@ -114,7 +122,9 @@ const AudioUploader: React.FC<AudioUploaderProps> = ({ clerkUserId }) => {
       {/* Транскрипт або помилка з відступом зверху */}
       {(error || transcript) && (
         <div className="mt-10 text-center">
-          {error && <p className="text-red-600 mb-6">❌ {error}</p>}
+          {error && error !== "You must pay to add more entries" && (
+            <p className="text-red-600 mb-6">❌ {error}</p>
+          )}
           {transcript && (
             <>
               <div className="mb-8">

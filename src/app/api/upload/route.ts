@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
       where: { userId: existingUser.id },
     });
 
-    if (voiceEntryCount >= 10 && existingUser.paymentStatus !== "PAID") {
+    if (voiceEntryCount >= 2 && existingUser.paymentStatus !== "PAID") {
       return NextResponse.json(
         { error: "You must pay to add more entries" },
         { status: 403 }
