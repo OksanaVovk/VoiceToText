@@ -48,8 +48,8 @@ export async function POST(req: NextRequest) {
         quantity: 1,
       },
     ],
-    success_url: "http://localhost:3000/success",
-    cancel_url: "http://localhost:3000/cancel",
+    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success`,
+    cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cancel`,
   });
 
   return NextResponse.json({ url: session.url });
