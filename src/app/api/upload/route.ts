@@ -1,9 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
+import { S3Client } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
 import { prisma } from "@/lib/prisma";
 import { AssemblyAI } from "assemblyai";
 
 const ASSEMBLYAI_API_KEY = process.env.ASSEMBLYAI_API_KEY!;
 const ASSEMBLYAI_UPLOAD_URL = "https://api.assemblyai.com/v2/upload";
+
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION!,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+  },
+});
 
 export const config = {
   api: {
@@ -25,9 +35,24 @@ async function uploadToAssemblyAI(audioBuffer: Buffer): Promise<string> {
   return data.upload_url;
 }
 
+async function uploadToS3(buffer: Buffer, fileName: string): Promise<string> {
+  const upload = new Upload({
+    client: s3Client,
+    params: {
+      Bucket: process.env.AWS_S3_BUCKET_NAME!,
+      Key: `uploads/${fileName}`,
+      Body: buffer,
+      ContentType: "audio/mpeg",
+    },
+  });
+
+  await upload.done();
+
+  return `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/uploads/${fileName}`;
+}
+
 export async function POST(req: NextRequest) {
   try {
-    // --- Step 1: Parse multipart/form-data
     const formData = await req.formData();
     const file = formData.get("audio") as File;
     const clerkUserId = formData.get("clerkUserId") as string;
@@ -38,7 +63,8 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    // --- Step 2: Check user access
+
+    // Check if user exists in the database
     const existingUser = await prisma.user.findUnique({
       where: { clerkUserId },
     });
@@ -50,7 +76,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Порахувати кількість записів voiceEntries для цього користувача
+    // Limit on the number of records
     const voiceEntryCount = await prisma.voiceEntry.count({
       where: { userId: existingUser.id },
     });
@@ -62,33 +88,37 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // --- Прочитати файл у Buffer
+    // Read the file into a Buffer
     const arrayBuffer = await file.arrayBuffer();
     const audioBuffer = Buffer.from(arrayBuffer);
 
-    // --- Завантажити на AssemblyAI
-    const uploadUrl = await uploadToAssemblyAI(audioBuffer);
+    // Upload to S3
+    const fileName = `${Date.now()}_${file.name.replace(/\s+/g, "_")}`;
+    const s3Url = await uploadToS3(audioBuffer, fileName);
 
-    // --- Виконати транскрипцію
+    // Upload from S3 to AssemblyAI for transcription
+    const transcriptResult = await uploadToAssemblyAI(audioBuffer);
+
+    // Initialize AssemblyAI client and start transcription
     const client = new AssemblyAI({ apiKey: ASSEMBLYAI_API_KEY });
     const transcript = await client.transcripts.transcribe({
-      audio: uploadUrl,
+      audio: transcriptResult,
       speech_model: "universal",
       language_detection: true,
       auto_chapters: true,
       auto_highlights: true,
     });
 
-    // --- Зберегти в базу
+    // Save transcription result to database
     const newEntry = await prisma.voiceEntry.create({
       data: {
         userId: existingUser.id,
         transcript: transcript.text,
-        audioUrl: uploadUrl,
+        audioUrl: s3Url,
       },
     });
 
-    // Отримати всі записи користувача після додавання нового
+    // Get all voice entries for a user from the database
     const allEntries = await prisma.voiceEntry.findMany({
       where: { userId: existingUser.id },
       orderBy: { createdAt: "desc" },

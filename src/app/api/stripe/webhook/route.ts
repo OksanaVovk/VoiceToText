@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 
       const customerId = session.customer as string;
 
-      // 🔍 Знаходимо користувача по stripeCustomerId
+      // Find user by stripeCustomerId
       const user = await prisma.user.findFirst({
         where: { stripeCustomerId: customerId },
       });
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
         return new NextResponse("User not found", { status: 404 });
       }
 
-      // ✅ Оновлюємо статус користувача
+      // Update user status
       await prisma.user.update({
         where: { id: user.id },
         data: { paymentStatus: "PAID" },

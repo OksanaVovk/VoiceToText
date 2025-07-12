@@ -27,7 +27,6 @@ export const VoiceEntriesProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Кастомний хук для зручного використання контексту
 export const useVoiceEntries = () => {
   const context = useContext(VoiceEntriesContext);
   if (!context) {

@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const { amount, clerkUserId } = await req.json(); // ✅ тільки один виклик
+  const { amount, clerkUserId } = await req.json();
 
   if (!amount || typeof amount !== "number" || amount < 50) {
     return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
