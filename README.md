@@ -52,7 +52,8 @@ Create a .env file and copy the following template:
 DATABASE_URL=
 
 # Clerk (Authentication)
-NEXT_PUBLIC_CLERK_FRONTEND_API=
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
 
 # AssemblyAI (Transcription)
 ASSEMBLYAI_API_KEY=
