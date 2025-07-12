@@ -33,8 +33,8 @@ This is a full-stack Next.js application that allows users to upload audio files
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/OksanaVovk/VoiceToText.git
-cd VoiceToText
+git clone https://github.com/OksanaVovk/voice-to-text.git
+cd voice-to-text
 ```
 
 2. **Install dependencies**
