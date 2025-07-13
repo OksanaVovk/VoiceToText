@@ -30,7 +30,7 @@ const Payment = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="min-h-screen bg-white flex items-center justify-center px-4 py-6">
       <div className="bg-white p-8 rounded-2xl shadow-lg shadow-orange-200 max-w-md w-full text-center space-y-6 border border-orange-100">
         <h2 className="text-2xl font-semibold text-gray-800">
           Unlock Full Access

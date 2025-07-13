@@ -5,8 +5,8 @@ export default function CancelPage() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center space-y-6">
-      <h1 className="text-2xl font-semibold">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center space-y-6">
+      <h1 className="text-2xl font-semibold text-black">
         ❌ Payment was cancelled or an error occurred.
       </h1>
       <button
