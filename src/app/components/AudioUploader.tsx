@@ -143,7 +143,9 @@ const AudioUploader: React.FC<AudioUploaderProps> = ({ clerkUserId }) => {
       {(error || transcript) && (
         <div className="mt-10 text-center">
           {error && error !== "You must pay to add more entries" && (
-            <p className="text-red-600 mb-6">❌ {error}</p>
+            <p className="text-red-600 mb-6">
+              ❌ {typeof error === "string" ? error : JSON.stringify(error)}
+            </p>
           )}
           {transcript && (
             <>
