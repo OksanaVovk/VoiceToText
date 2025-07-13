@@ -65,7 +65,7 @@ export default function Home() {
               </h2>
               <button
                 onClick={() => setShowDrawer(false)}
-                className="sm:hidden text-gray-600 text-2xl hover:text-blue-600 transition-colors duration-200"
+                className="sm:hidden text-blue-600 text-2xl hover:text-blue-800 transition-colors duration-200"
                 aria-label="Close drawer"
               >
                 ×
