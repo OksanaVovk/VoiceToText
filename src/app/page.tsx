@@ -95,7 +95,7 @@ export default function Home() {
           </div>
 
           {/* Main uploader area */}
-          <div className="min-h-screen flex flex-col pt-28  w-full sm:w-2/3">
+          <div className="min-h-screen flex flex-col py-14 sm:py-28 w-full sm:w-2/3">
             <AudioUploader clerkUserId={user.id} />
             <a
               onClick={() => setShowDrawer(true)}
@@ -107,7 +107,7 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <div className="min-h-screen flex pt-28 pb-28 flex-col items-center">
+        <div className="min-h-screen flex py-14 sm:py-28 flex-col items-center">
           <div className="h-[200px] w-[300px] mb-4">
             <Fox />
           </div>
