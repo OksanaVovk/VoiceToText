@@ -148,17 +148,19 @@ const AudioUploader: React.FC<AudioUploaderProps> = ({ clerkUserId }) => {
             </p>
           )}
           {transcript && (
-            <div className="mb-8">
-              <h3 className="text-lg font-semibold mb-2">📝 Result:</h3>
-              <p>{transcript}</p>
-            </div>
+            <>
+              <div className="mb-8">
+                <h3 className="text-lg font-semibold mb-2">📝 Result:</h3>
+                <p>{transcript}</p>
+              </div>
+              <button
+                onClick={handleClean}
+                className="min-w-[120px] bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition font-medium"
+              >
+                Clear
+              </button>
+            </>
           )}
-          <button
-            onClick={handleClean}
-            className="min-w-[120px] bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition font-medium"
-          >
-            Clear
-          </button>
         </div>
       )}
     </div>
