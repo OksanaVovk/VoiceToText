@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import AudioUploader from "./components/AudioUploader";
@@ -16,6 +16,7 @@ interface VoiceEntry {
 
 export default function Home() {
   const { voiceEntries, setVoiceEntries } = useVoiceEntries();
+  const [showDrawer, setShowDrawer] = useState(false);
   const { user } = useUser();
 
   const syncUser = async () => {
@@ -51,21 +52,36 @@ export default function Home() {
   return (
     <>
       {user ? (
-        <div className="flex h-full p-8 gap-8">
-          {/* Sidebar with history */}
-          <div className="flex flex-col h-full w-1/3 border-r border-gray-300 pr-8">
-            <h2 className="text-2xl font-semibold mb-8">
-              Transcription History
-            </h2>
+        <div className="flex flex-col sm:flex-row h-full p-4 gap-4 relative">
+          {/* Sidebar як drawer для мобілки */}
+          <div
+            className={`fixed top-0 left-0 w-3/4 max-w-[300px] bg-white z-40
+    h-[100vh] border-r border-gray-300
+    shadow-none
+    transform transition-transform duration-300 ease-in-out ${
+      showDrawer ? "translate-x-0" : "-translate-x-full"
+    } sm:relative sm:translate-x-0 sm:flex sm:flex-col sm:w-1/3 border-r border-gray-300 p-4`}
+          >
+            <div className="flex justify-between items-center mb-4 sm:mb-8">
+              <h2 className="text-xl font-semibold">Transcription History</h2>
+              <button
+                onClick={() => setShowDrawer(false)}
+                className="sm:hidden text-gray-600 text-2xl"
+                aria-label="Close drawer"
+              >
+                ×
+              </button>
+            </div>
             <div className="space-y-4 max-h-[80vh] pr-2 overflow-y-auto">
               {voiceEntries.length > 0 ? (
                 voiceEntries.map((entry) => (
                   <div
                     key={entry.id}
-                    className="bg-white p-4 rounded shadow-sm border border-gray-200  space-y-3"
+                    className="bg-white p-4 rounded shadow-sm border border-gray-200 space-y-3"
                   >
                     <p className="text-sm text-gray-500">
-                      <strong>Date:</strong> {formatDate(entry.createdAt)}
+                      <strong>Date:</strong>{" "}
+                      {new Date(entry.createdAt).toLocaleDateString()}
                     </p>
                     {entry.audioUrl && (
                       <audio controls src={entry.audioUrl} className="w-full" />
@@ -82,18 +98,23 @@ export default function Home() {
           </div>
 
           {/* Main uploader area */}
-          <div className="flex w-2/3 justify-center items-start">
+          <div className="min-h-screen flex flex-col pt-28  w-full sm:w-2/3">
             <AudioUploader clerkUserId={user.id} />
+            <a
+              onClick={() => setShowDrawer(true)}
+              className="sm:hidden text-blue-600 hover:text-blue-800 cursor-pointer select-none inline-flex items-center mt-4"
+            >
+              History
+              <span className="ml-1 text-sm font-semibold">-&gt;</span>
+            </a>
           </div>
         </div>
       ) : (
-        <div className="min-h-screen flex pt-28 justify-center">
-          <div>
-            <div className="h-[200px]  w-[300px]">
-              <Fox />
-            </div>
-            <AudioUploader clerkUserId={null} />
+        <div className="min-h-screen flex pt-28 flex-col items-center">
+          <div className="h-[200px] w-[300px] mb-4">
+            <Fox />
           </div>
+          <AudioUploader clerkUserId={null} />
         </div>
       )}
     </>

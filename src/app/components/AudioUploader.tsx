@@ -102,7 +102,7 @@ const AudioUploader: React.FC<AudioUploaderProps> = ({ clerkUserId }) => {
   };
 
   return (
-    <div className="max-w-xl mx-auto flex flex-col h-full">
+    <div className="max-w-xl mx-auto flex flex-col">
       <h2 className="text-2xl font-semibold text-center mb-8">
         🎤 Upload audio for transcription
       </h2>

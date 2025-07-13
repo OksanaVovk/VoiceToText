@@ -6,7 +6,7 @@ const Header = () => {
   return (
     <header className="w-full bg-white shadow-md py-4 px-8 flex items-center justify-between">
       <Link href="/" passHref>
-        <h1 className="text-3xl text-orange-500 cursor-pointer bold logo-font">
+        <h1 className="text-2xl sm:text-3xl text-orange-500 cursor-pointer bold logo-font">
           Voice to Text
         </h1>
       </Link>
