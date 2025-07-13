@@ -55,11 +55,11 @@ export default function Home() {
         <div className="flex bg-white flex-col sm:flex-row h-full p-4 gap-4 relative">
           {/* Sidebar як drawer для мобілки */}
           <div
-            className={`fixed top-0 left-0 w-3/4 max-w-[300px] z-40 h-[100vh] border-r border-gray-300 shadow-none transform transition-transform duration-300 ease-in-out ${
+            className={`fixed bg-white top-0 left-0 w-3/4 max-w-[300px] z-40 h-[100vh] border-r border-gray-300 shadow-none transform transition-transform duration-300 ease-in-out ${
               showDrawer ? "translate-x-0" : "-translate-x-full"
             } sm:relative sm:translate-x-0 sm:flex sm:flex-col sm:w-1/3 border-r border-gray-300 p-4`}
           >
-            <div className="flex justify-between items-center mb-4 sm:mb-8">
+            <div className="flex bg-white justify-between items-center mb-4 sm:mb-8">
               <h2 className="text-xl font-semibold text-black">
                 Transcription History
               </h2>
