@@ -89,7 +89,7 @@ export default function Home() {
       ) : (
         <div className="min-h-screen flex pt-28 justify-center">
           <div>
-            <div className="h-[200px]  w-full">
+            <div className="h-[200px]  w-[300px]">
               <Fox />
             </div>
             <AudioUploader clerkUserId={null} />
