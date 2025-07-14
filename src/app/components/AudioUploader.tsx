@@ -150,8 +150,10 @@ const AudioUploader: React.FC<AudioUploaderProps> = ({ clerkUserId }) => {
           {transcript && (
             <>
               <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-2">📝 Result:</h3>
-                <p>{transcript}</p>
+                <h3 className="text-lg text-black font-semibold mb-2">
+                  📝 Result:
+                </h3>
+                <p className="text-black">{transcript}</p>
               </div>
               <button
                 onClick={handleClean}
